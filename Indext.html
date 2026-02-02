@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de Optimización de Procesos y Analítica Operativa - Eduwin Laiton</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #38bdf8;
+            --accent-light: #2dd4bf;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --bg-light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.8);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-light);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-align: center;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8)), url('proposal_header_analytics_1769994086591.png');
+            background-size: cover;
+            background-position: center;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--white);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 700;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--accent);
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 2px;
+        }
+
+        /* Content Modules */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 1.25rem 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .price {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Solutions list */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Pricing highlight */
+        .pricing-total {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 3rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .pricing-total h3 {
+            color: var(--accent);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-total .amount {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            margin: 1.5rem 0;
+            display: block;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .contact-item h4 {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .contact-item p {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer-copy {
+            opacity: 0.5;
+            font-size: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        /* Print Button */
+        .btn-print {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-print:hover {
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .hero {
+                height: 50vh;
+            }
+
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+
+            .pricing-total .amount {
+                font-size: 2.5rem;
+            }
+
+            nav {
+                gap: 0.75rem;
+                padding: 0.75rem 0.5rem;
+            }
+
+            nav a {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+
+            .btn-print,
+            nav {
+                display: none;
+            }
+
+            section {
+                padding: 2rem 0;
+                page-break-inside: avoid;
+                border: none;
+            }
+
+            .hero {
+                height: auto;
+                min-height: unset;
+                background: none !important;
+                color: var(--primary);
+                padding: 0;
+                margin-bottom: 2rem;
+            }
+
+            .hero h1,
+            .hero p,
+            .badge {
+                color: var(--primary) !important;
+                animation: none !important;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+
+            body {
+                background: white;
+            }
+
+            .pricing-total {
+                background: #f1f5f9 !important;
+                color: var(--primary) !important;
+                border: 1px solid #ddd;
+            }
+
+            .pricing-total h3,
+            .pricing-total .amount {
+                color: var(--primary) !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="btn-print" onclick="window.print()">Descargar PDF / Imprimir</button>
+
+    <div class="hero">
+        <div class="hero-content">
+            <span class="badge">Propuesta de Servicios 2026</span>
+            <h1>Optimización de Procesos y Analítica Operativa</h1>
+            <p>Transformando datos en decisiones estratégicas mediante Power Platform</p>
+            <div style="font-weight: 500; font-size: 1rem; margin-top: 1rem;">
+                Preparado para: <strong>[Nombre de la Empresa]</strong><br>
+                Por: <strong>Eduwin Laiton</strong> — Soluciones Digitales
+            </div>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <a href="#presentacion" class="active">Presentación</a>
+        <a href="#objetivos">Objetivos</a>
+        <a href="#soluciones">Soluciones</a>
+        <a href="#metodologia">Metodología</a>
+        <a href="#inversion">Inversión</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="container">
+        <!-- 1. Presentación -->
+        <section id="presentacion">
+            <div class="section-title">
+                <h2>1. Presentación</h2>
+            </div>
+            <div style="max-width: 800px; font-size: 1.1rem; color: var(--text-main); line-height: 1.8;">
+                <p style="margin-bottom: 1.5rem;">La presente propuesta describe una oferta de soluciones digitales
+                    orientadas a <strong>optimizar procesos</strong> relacionados con la gestión de cartera, la
+                    administración integral de los negocios y los contactos operativos con el cliente.</p>
+                <p style="margin-bottom: 1.5rem;">El enfoque se centra en la <strong>automatización de tareas
+                        clave</strong>, la digitalización de flujos de información y la estandarización de los reportes
+                    que se generan desde el ERP, garantizando consistencia, trazabilidad y oportunidad en la
+                    información.</p>
+                <p>Las soluciones propuestas facilitan la operación diaria del personal y fortalecen el control para los
+                    líderes, utilizando el ERP como fuente única de información, evitando controles paralelos y
+                    liberando a los equipos del trabajo repetitivo.</p>
+            </div>
+        </section>
+
+        <!-- 2. Justificación -->
+        <section id="justificacion">
+            <div class="section-title">
+                <h2>2. Justificación del Enfoque</h2>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>Digitalización desde la base</h3>
+                    <p>La verdadera eficiencia se logra cuando la digitalización inicia desde la base del proceso, no
+                        solo en tableros gerenciales.</p>
+                </div>
+                <div class="card">
+                    <h3>Integración Total</h3>
+                    <p>Conexión directa a la información del ERP (Datamart SINCO) asegurando una única fuente de verdad
+                        sin procesos paralelos.</p>
+                </div>
+                <div class="card">
+                    <h3>Visión Estratégica</h3>
+                    <p>Combinamos capacidades técnicas con un conocimiento profundo del negocio inmobiliario para
+                        diseñar soluciones de impacto real.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Objetivos -->
+        <section id="objetivos">
+            <div class="section-title">
+                <h2>3. Objetivos del Proyecto</h2>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>Agilidad Operativa</h3>
+                    <p>Iniciar la digitalización y automatización de reportes operativos mediante Excel, reduciendo
+                        reprocesos y asegurando información confiable.</p>
+                </div>
+                <div class="card">
+                    <h3>Control Gerencial</h3>
+                    <p>Construir tableros en Power BI que consoliden KPIs clave para visualización en tiempo real y toma
+                        de decisiones informadas.</p>
+                </div>
+                <div class="card">
+                    <h3>Automatización</h3>
+                    <p>Desarrollar apps en Power Apps con flujos de Power Automate para organizar el proceso operativo y
+                        automatizar tareas críticas.</p>
+                </div>
+            </div>
+            <div
+                style="margin-top: 3rem; background: var(--bg-light); padding: 2rem; border-left: 4px solid var(--accent); border-radius: 0 1rem 1rem 0;">
+                <p style="font-style: italic; font-size: 1.2rem; color: var(--secondary);">"¿Te imaginas tener cualquier
+                    informe de todos tus proyectos en solo 5 minutos?"</p>
+            </div>
+        </section>
+
+        <!-- 4. Soluciones -->
+        <section id="soluciones">
+            <div class="section-title">
+                <h2>4. Soluciones Propuestas</h2>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>4.1 Dashboards en Excel</h3>
+                    <p>Uso de Power Query y Power Pivot para automatizar carga de datos. Incluye:</p>
+                    <ul class="feature-list" style="margin-top: 1rem;">
+                        <li>Ventas mes a mes</li>
+                        <li>Estado general de negocios (Trámites)</li>
+                        <li>Control de cartera cuotas iniciales</li>
+                        <li>Estado de desembolsos hipotecarios</li>
+                        <li>Control de subsidios</li>
+                        <li>Flujo de caja y proyecciones</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>4.2 Power BI & Apps</h3>
+                    <p>Visualización avanzada y captura de datos digitalizada:</p>
+                    <ul class="feature-list" style="margin-top: 1rem;">
+                        <li>KPIs por área/proyecto/usuario</li>
+                        <li>Publicación en Power BI Service</li>
+                        <li>Power Apps para registro de trámites</li>
+                        <li>Flujos de notificaciones y alertas</li>
+                        <li>Integración con SharePoint/Excel Online</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Metodología -->
+        <section id="metodologia">
+            <div class="section-title">
+                <h2>5. Metodología y Alcance</h2>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>Fases de Implementación</h3>
+                    <p>1. Levantamiento de necesidades (Reunión técnica)</p>
+                    <p>2. Diseño y validación de arquitectura de datos</p>
+                    <p>3. Desarrollo de dashboards y flujos</p>
+                    <p>4. Capacitación a usuarios finales</p>
+                    <p>5. Soporte post-implementación (30 días)</p>
+                </div>
+                <div class="card">
+                    <h3>Consideraciones</h3>
+                    <p>Los tiempos se definirán según el alcance contratado y la prioridad de los paquetes. La conexión
+                        se realiza directamente al Datamart de SINCO para máxima eficiencia.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Inversión -->
+        <section id="inversion">
+            <div class="section-title">
+                <h2>6. Inversión Estimada</h2>
+            </div>
+
+            <h3 style="margin: 2rem 0 1rem;">Paquete 1: Financiero</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Solución</th>
+                            <th>Enfoque</th>
+                            <th>Inversión Estimada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Comercial y Flujo de Caja</td>
+                            <td>Modelo consolidado de ventas y proyecciones</td>
+                            <td class="price">Desde $4.500.000 COP</td>
+                        </tr>
+                        <tr>
+                            <td>Control de Cuotas Iniciales</td>
+                            <td>Control operativo de recaudo y vencimientos</td>
+                            <td class="price">Desde $3.800.000 COP</td>
+                        </tr>
+                        <tr>
+                            <td>Desembolsos Hipotecarios</td>
+                            <td>Seguimiento de estados y cuellos de botella</td>
+                            <td class="price">Desde $4.000.000 COP</td>
+                        </tr>
+                        <tr>
+                            <td>Desembolsos de Subsidios</td>
+                            <td>Control por tipo, estado y fechas de giro</td>
+                            <td class="price">Desde $4.000.000 COP</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grid" style="margin-top: 2rem;">
+                <div>
+                    <h3 style="margin-bottom: 1rem;">Paquete 2: PreEscrituración</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Solución</th>
+                                    <th>Inversión</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Trámites y Negocios No Entregados</td>
+                                    <td class="price">Desde $5.500.000 COP</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="margin-bottom: 1rem;">Paquete 3: PosEscrituración</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Solución</th>
+                                    <th>Inversión</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Seguimiento de Trámites PosEscritura</td>
+                                    <td class="price">Desde $3.800.000 COP</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pricing-total">
+                <h3>Implementación Integral</h3>
+                <p>Visión completa punta a punta de todos los procesos inmobiliarios</p>
+                <span class="amount">Desde $22.000.000 COP</span>
+                <p style="opacity: 0.8; font-size: 0.9rem;">Incluye arquitectura unificada, optimización de modelos de
+                    datos y soporte extendido.</p>
+            </div>
+        </section>
+
+        <!-- 7. Beneficios -->
+        <section id="beneficios">
+            <div class="section-title">
+                <h2>7. Beneficios Esperados</h2>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>Confiabilidad</h3>
+                    <p>Información centralizada, actualizada y validada contra el ERP.</p>
+                </div>
+                <div class="card">
+                    <h3>Productividad</h3>
+                    <p>Reducción drástica en tiempos de elaboración de reportes y errores manuales.</p>
+                </div>
+                <div class="card">
+                    <h3>Gestión Activa</h3>
+                    <p>Equipos operativos enfocados en gestionar el negocio, no en alimentar archivos.</p>
+                </div>
+                <div class="card">
+                    <h3>Control Real</h3>
+                    <p>Mayor visibilidad para líderes con alertas tempranas y KPIs en tiempo real.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Condiciones -->
+        <section id="condiciones">
+            <div class="section-title">
+                <h2>8. Condiciones y Siguientes Pasos</h2>
+            </div>
+            <div class="grid">
+                <div>
+                    <h3>Condiciones Generales</h3>
+                    <ul class="feature-list" style="margin-top: 1rem;">
+                        <li>Garantía de acceso a fuentes de datos</li>
+                        <li>Soporte de 30 días incluido</li>
+                        <li>Vigencia de la propuesta: 30 días</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Siguientes Pasos</h3>
+                    <ul class="feature-list" style="margin-top: 1rem;">
+                        <li>Agendar reunión de alistamiento</li>
+                        <li>Priorización de entregables</li>
+                        <li>Firma de acuerdo de confidencialidad</li>
+                        <li>Inicio del desarrollo por fases</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+        <section id="contacto" style="border-bottom: none;">
+            <div class="section-title" style="text-align: center;">
+                <h2>Contacto</h2>
+                <p>Estamos listos para iniciar este proceso de transformación digital</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h4>Consultor</h4>
+                    <p>Eduwin Laiton</p>
+                </div>
+                <div class="contact-item">
+                    <h4>Email</h4>
+                    <p>eduwinlo@icloud.com</p>
+                </div>
+                <div class="contact-item">
+                    <h4>Teléfono</h4>
+                    <p>320 211 5575</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <span class="footer-logo">EDUWIN LAITON</span>
+        <p>Soluciones Digitales Power Platform | 2026</p>
+        <p class="footer-copy">&copy; Propuesta de Servicios Profesionales. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Simple scroll spy for navigation
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
