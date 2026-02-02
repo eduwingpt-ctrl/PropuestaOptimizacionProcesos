@@ -400,40 +400,136 @@
             }
         }
 
-        /* Mobile Adjustments */
+        /* Mobile Adjustments and Enhancements */
         @media (max-width: 768px) {
             .hero {
-                height: 50vh;
+                height: auto;
+                padding: 4rem 1rem;
             }
 
             .hero h1 {
-                font-size: 2.25rem;
-            }
-
-            section {
-                padding: 3rem 0;
-            }
-
-            .pricing-total .amount {
                 font-size: 2.5rem;
+                line-height: 1.1;
+            }
+
+            .badge {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
             }
 
             nav {
-                gap: 0.75rem;
-                padding: 0.75rem 0.5rem;
+                justify-content: space-between;
+                padding: 0.75rem 1.5rem;
             }
 
-            nav a {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: var(--white);
+                display: flex;
+                flex-direction: column;
+                padding: 5rem 2rem;
+                gap: 2rem;
+                transition: 0.4s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+                color: var(--primary);
+            }
+
+            .hamburger {
+                display: block;
+                cursor: pointer;
+                z-index: 1001;
+            }
+
+            .hamburger span {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background: var(--primary);
+                margin: 5px 0;
+                transition: 0.4s;
+            }
+
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            section {
+                padding: 3.5rem 0;
+            }
+
+            .section-title h2 {
+                font-size: 1.75rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .pricing-total {
+                padding: 2rem 1rem;
+            }
+
+            .pricing-total .amount {
+                font-size: 2rem;
+            }
+
+            .btn-print {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.75rem 1rem;
                 font-size: 0.8rem;
             }
+        }
+
+        /* Default Hamburger state */
+        .hamburger {
+            display: none;
+        }
+
+        .nav-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.1rem;
+            text-decoration: none;
         }
 
         /* Print Styles */
         @media print {
 
             .btn-print,
-            nav {
-                display: none;
+            nav,
+            .hamburger {
+                display: none !important;
             }
 
             section {
@@ -484,29 +580,38 @@
 
 <body>
 
-    <button class="btn-print" onclick="window.print()">Descargar PDF / Imprimir</button>
+    <button class="btn-print" onclick="window.print()">Descargar PDF</button>
 
     <div class="hero">
         <div class="hero-content">
             <span class="badge">Propuesta de Servicios 2026</span>
             <h1>Optimización de Procesos y Analítica Operativa</h1>
             <p>Transformando datos en decisiones estratégicas mediante Power Platform</p>
-            <div style="font-weight: 500; font-size: 1rem; margin-top: 1rem;">
-                Preparado para: <strong>ALIX MARICELA LANCHEROS- Ospinas & Cia</strong><br>
+            <div style="font-weight: 500; font-size: 1rem; margin-top: 1rem; color: rgba(255,255,255,0.9)">
+                Preparado para: <strong>Maricela Lancheros - Ospinas & Cia</strong><br>
                 Por: <strong>Eduwin Laiton</strong> — Soluciones Digitales
             </div>
         </div>
     </div>
 
     <nav id="navbar">
-        <a href="#presentacion" class="active">Presentación</a>
-        <a href="#objetivos">Objetivos</a>
-        <a href="#soluciones">Soluciones</a>
-        <a href="#metodologia">Metodología</a>
-        <a href="#inversion">Inversión</a>
-        <a href="#beneficios">Beneficios</a>
-        <a href="#contacto">Contacto</a>
+        <a href="#" class="nav-logo">EDUWIN LAITON</a>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="#presentacion" class="active">Presentación</a>
+            <a href="#objetivos">Objetivos</a>
+            <a href="#soluciones">Soluciones</a>
+            <a href="#metodologia">Metodología</a>
+            <a href="#inversion">Inversión</a>
+            <a href="#beneficios">Beneficios</a>
+            <a href="#contacto">Contacto</a>
+        </div>
     </nav>
+
 
     <div class="container">
         <!-- 1. Presentación -->
@@ -807,10 +912,26 @@
     </footer>
 
     <script>
+        // Hamburger Menu Logic
+        const hamburger = document.getElementById('hamburger');
+        const navLinksContainer = document.getElementById('nav-links');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinksContainer.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinksContainer.classList.remove('active');
+            });
+        });
+
         // Simple scroll spy for navigation
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('nav a');
 
             let current = '';
 
@@ -832,4 +953,3 @@
 </body>
 
 </html>
-
